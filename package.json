@@ -1,0 +1,22 @@
+{
+  "name": "user-api-tdd",
+  "version": "1.0.0",
+  "description": "POST /users - create new user (username, password, about)",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --require ts-node/register test/*.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chai": "^4.2.22",
+    "@types/mocha": "^9.0.0",
+    "chai": "^4.3.4",
+    "mocha": "^9.1.3"
+  },
+  "dependencies": {
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.2"
+  }
+}
