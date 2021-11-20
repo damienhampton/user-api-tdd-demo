@@ -3,7 +3,8 @@
 ## POST /users
 - create new user (username, password, about)
 
-```{
+```
+{
   username,
   password,
   about,
