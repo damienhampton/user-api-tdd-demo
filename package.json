@@ -4,7 +4,8 @@
   "description": "POST /users - create new user (username, password, about)",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require ts-node/register test/*.ts"
+    "test": "mocha --require ts-node/register test/*.ts",
+    "test:watch": "npm test -- --watch-files=\"**/*.ts\" --watch"
   },
   "keywords": [],
   "author": "",
