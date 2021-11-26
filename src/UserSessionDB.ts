@@ -16,6 +16,6 @@ export class UserSessionDB implements UserSessionDBInterface {
     return this.db.add(this.collection, { userId, token: uuid() });
   }
   async findSession(token:string){
-    return this.db.find(this.collection, (s:UserSession) => s.token === token);
+    return this.db.find<UserSession>(this.collection, 'token', token);
   }
 }

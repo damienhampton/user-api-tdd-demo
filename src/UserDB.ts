@@ -16,9 +16,9 @@ export class UserDB implements UserDBInterface{
     return this.db.add(this.collection, registrationDetails);
   }
   async findUser(username:string){
-    return this.db.find(this.collection, (u:User) => u.username === username);
+    return this.db.find<User>(this.collection, 'username', username);
   }
   async findUserById(id:string){
-    return this.db.find(this.collection, (u:User) => u.id === id)
+    return this.db.find<User>(this.collection, 'id', id)
   }
 }
