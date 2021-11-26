@@ -5,16 +5,16 @@ import { UserSessionDBInterface } from "./UserSessionDB";
 export class UserApi{
   constructor(private userDb: UserDBInterface, private sessionDb: UserSessionDBInterface) {}
 
-  public register(registrationDetails: RegistrationDetails): UserResponse {
-    const newUser = this.userDb.addUser(registrationDetails);
+  public async register(registrationDetails: RegistrationDetails): Promise<UserResponse> {
+    const newUser = await this.userDb.addUser(registrationDetails);
     return {
       id: newUser.id,
       username: newUser.username,
     }
   }
 
-  public login(loginDetails: LoginDetails): LoginResponse {
-    const user = this.userDb.findUser(loginDetails.username);
+  public async login(loginDetails: LoginDetails): Promise<LoginResponse> {
+    const user = await this.userDb.findUser(loginDetails.username);
     if(user.password !== loginDetails.password){
       throw new Error('Invalid password');
     }
@@ -22,9 +22,9 @@ export class UserApi{
     return session;
   }
 
-  public getAbout(token: string): string {
-    const session = this.sessionDb.findSession(token);
-    const user = this.userDb.findUserById(session.userId);
+  public async getAbout(token: string): Promise<string> {
+    const session = await this.sessionDb.findSession(token);
+    const user = await this.userDb.findUserById(session.userId);
     return user.about;
   }
 }

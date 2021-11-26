@@ -3,8 +3,8 @@ import { DBInterface } from './DB';
 import { UserSession } from './models';
 
 export interface UserSessionDBInterface {
-  addSession(userId: string): UserSession;
-  findSession(token: string): UserSession;
+  addSession(userId: string): Promise<UserSession>;
+  findSession(token: string): Promise<UserSession>;
 }
 
 export class UserSessionDB implements UserSessionDBInterface {
@@ -12,10 +12,10 @@ export class UserSessionDB implements UserSessionDBInterface {
 
   constructor(private db: DBInterface){}
 
-  addSession(userId:string){
+  async addSession(userId:string){
     return this.db.add(this.collection, { userId, token: uuid() });
   }
-  findSession(token:string){
+  async findSession(token:string){
     return this.db.find(this.collection, (s:UserSession) => s.token === token);
   }
 }

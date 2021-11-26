@@ -18,18 +18,18 @@ describe('Users', () => {
       about: 'about',
     }
 
-    it('should return user details', () => {
-      const newUser = (new UserApi(userDb, sessionDb)).register(registrationDetails);
+    it('should return user details', async () => {
+      const newUser = await (new UserApi(userDb, sessionDb)).register(registrationDetails);
       
       assert.isDefined(newUser);
       assert.isString(newUser.id);
       assert.equal(newUser.username, registrationDetails.username);
     });
 
-    it('should issue unique ids', () => {
+    it('should issue unique ids', async () => {
       const userApi = new UserApi(userDb, sessionDb);
-      const newUser1 = userApi.register(registrationDetails);
-      const newUser2 = userApi.register(registrationDetails);
+      const newUser1 = await userApi.register(registrationDetails);
+      const newUser2 = await userApi.register(registrationDetails);
     
       assert.notEqual(newUser1.id, newUser2.id);
     });
@@ -43,8 +43,8 @@ describe('Users', () => {
     before(() => {
       userApi.register({ username, password, about: 'about' });
     })
-    it('should log a registed user in', () => {
-      const { token } = userApi.login({ username, password });
+    it('should log a registed user in', async () => {
+      const { token } = await userApi.login({ username, password });
       assert.isString(token);
     })
   })
@@ -60,9 +60,9 @@ describe('Users', () => {
       before(() => {
         userApi.register({ username, password, about });
       })
-      it('should return the about data for a user', () => {
-        const { token } = userApi.login({ username, password });
-        const aboutResponse = userApi.getAbout(token);
+      it('should return the about data for a user', async () => {
+        const { token } = await userApi.login({ username, password });
+        const aboutResponse = await userApi.getAbout(token);
         assert.equal(aboutResponse, about);
       })
     })
@@ -76,11 +76,11 @@ describe('Users', () => {
       before(() => {
         userApi.register({ username, password, about });
       })
-      it('should return the about data for a different user', () => {
+      it('should return the about data for a different user', async () => {
         
-        const { token } = userApi.login({ username, password });
+        const { token } = await userApi.login({ username, password });
 
-        const aboutResponse = userApi.getAbout(token);
+        const aboutResponse = await userApi.getAbout(token);
 
         assert.equal(aboutResponse, about);
       })

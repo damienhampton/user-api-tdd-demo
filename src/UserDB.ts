@@ -2,9 +2,9 @@ import { DBInterface } from "./DB";
 import { RegistrationDetails, User } from "./models";
 
 export interface UserDBInterface {
-  addUser(user: RegistrationDetails): User;
-  findUser(username: string): User;
-  findUserById(id: string): User;
+  addUser(user: RegistrationDetails): Promise<User>;
+  findUser(username: string): Promise<User>;
+  findUserById(id: string): Promise<User>;
 }
 
 export class UserDB implements UserDBInterface{
@@ -12,13 +12,13 @@ export class UserDB implements UserDBInterface{
 
   constructor(private db: DBInterface){}
 
-  addUser(registrationDetails:User){
+  async addUser(registrationDetails:User){
     return this.db.add(this.collection, registrationDetails);
   }
-  findUser(username:string){
+  async findUser(username:string){
     return this.db.find(this.collection, (u:User) => u.username === username);
   }
-  findUserById(id:string){
+  async findUserById(id:string){
     return this.db.find(this.collection, (u:User) => u.id === id)
   }
 }
