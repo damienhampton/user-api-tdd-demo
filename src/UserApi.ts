@@ -1,18 +1,9 @@
-import { RegistrationDetails, User, UserSession, UserResponse, LoginDetails, LoginResponse } from "./models";
-
-export interface UserDB {
-  addUser(user: RegistrationDetails): User;
-  findUser(username: string): User;
-  findUserById(id: string): User;
-}
-
-export interface UserSessionDB {
-  addSession(userId: string): UserSession;
-  findSession(token: string): UserSession;
-}
+import { RegistrationDetails, UserResponse, LoginDetails, LoginResponse } from "./models";
+import { UserDBInterface } from "./UserDB";
+import { UserSessionDBInterface } from "./UserSessionDB";
 
 export class UserApi{
-  constructor(private userDb: UserDB, private sessionDb: UserSessionDB) {}
+  constructor(private userDb: UserDBInterface, private sessionDb: UserSessionDBInterface) {}
 
   public register(registrationDetails: RegistrationDetails): UserResponse {
     const newUser = this.userDb.addUser(registrationDetails);

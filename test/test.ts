@@ -1,48 +1,13 @@
 import { assert } from 'chai';
-import { v4 as uuid } from 'uuid';
-import { User, UserSession } from '../src/models';
-import { UserApi, UserDB, UserSessionDB } from '../src/UserApi';
+import { UserApi } from '../src/UserApi';
+import { DB } from '../src/DB';
+import { UserDB } from '../src/UserDB';
+import { UserSessionDB } from '../src/UserSessionDB';
 
-const users:User[] = [];
+const fakeDb = new DB();
 
-const fakeUserDb: UserDB = {
-  addUser: (registrationDetails) => {
-    const newUser = Object.assign({}, registrationDetails, { id: uuid() });
-    users.push(newUser);
-    return newUser;
-  },
-  findUser: (username) => {
-    const user = users.find(u => u.username === username);
-    if (!user) {
-      throw new Error('User not found');
-    }
-    return user;
-  },
-  findUserById: (id) => {
-    const user = users.find(u => u.id === id);
-    if (!user) {
-      throw new Error('User not found');
-    }
-    return user;
-  },
-}
-
-const sessions:UserSession[] = [];
-
-const fakeSessionDb: UserSessionDB = {
-  addSession: (userId) => {
-    const session = { userId, token: uuid() };
-    sessions.push(session);
-    return session;
-  },
-  findSession: (token) => {
-    const session = sessions.find(s => s.token === token);
-    if (!session) {
-      throw new Error('Session not found');
-    }
-    return session;
-  }
-}
+const userDb = new UserDB(fakeDb);
+const sessionDb = new UserSessionDB(fakeDb);
 
 describe('Users', () => {
   describe('registration', () => {
@@ -54,7 +19,7 @@ describe('Users', () => {
     }
 
     it('should return user details', () => {
-      const newUser = (new UserApi(fakeUserDb, fakeSessionDb)).register(registrationDetails);
+      const newUser = (new UserApi(userDb, sessionDb)).register(registrationDetails);
       
       assert.isDefined(newUser);
       assert.isString(newUser.id);
@@ -62,7 +27,7 @@ describe('Users', () => {
     });
 
     it('should issue unique ids', () => {
-      const userApi = new UserApi(fakeUserDb, fakeSessionDb);
+      const userApi = new UserApi(userDb, sessionDb);
       const newUser1 = userApi.register(registrationDetails);
       const newUser2 = userApi.register(registrationDetails);
     
@@ -73,7 +38,7 @@ describe('Users', () => {
   describe('login', () => {
     const username = 'username';
     const password = 'password';
-    const userApi = new UserApi(fakeUserDb, fakeSessionDb);
+    const userApi = new UserApi(userDb, sessionDb);
 
     before(() => {
       userApi.register({ username, password, about: 'about' });
@@ -90,7 +55,7 @@ describe('Users', () => {
       const username = 'username';
       const password = 'password';
       const about = 'about';
-      const userApi = new UserApi(fakeUserDb, fakeSessionDb);
+      const userApi = new UserApi(userDb, sessionDb);
 
       before(() => {
         userApi.register({ username, password, about });
@@ -106,7 +71,7 @@ describe('Users', () => {
       const password = 'password2';
       const about = 'about2';
 
-      const userApi = new UserApi(fakeUserDb, fakeSessionDb);
+      const userApi = new UserApi(userDb, sessionDb);
 
       before(() => {
         userApi.register({ username, password, about });
